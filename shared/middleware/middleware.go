@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"go-boilerplate/models"
 	"go-boilerplate/shared/context"
 	"net/http"
@@ -26,8 +25,6 @@ func Authentication(next echo.HandlerFunc) echo.HandlerFunc {
 		}
 
 		res := verifyToken(token[1])
-
-		fmt.Println(res)
 
 		if res == http.StatusUnauthorized {
 			return ct.ResponseJSON(400, nil, "Unauthorized")

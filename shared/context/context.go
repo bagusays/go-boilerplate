@@ -1,7 +1,6 @@
 package context
 
 import (
-	"fmt"
 	"go-boilerplate/models"
 	"go-boilerplate/shared/config"
 	"go-boilerplate/shared/validator"
@@ -17,7 +16,6 @@ type ApplicationContext struct {
 func (c *ApplicationContext) GetConfig(key string) interface{} {
 	config.LoadConfig()
 	val := viper.Get(key)
-	fmt.Println(val)
 	return val
 }
 
