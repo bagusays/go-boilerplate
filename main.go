@@ -19,7 +19,7 @@ func main() {
 
 	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
 		return func(c echo.Context) error {
-			cc := &context.CustomApplicationContext{c}
+			cc := &context.ApplicationContext{c}
 			return next(cc)
 		}
 	})

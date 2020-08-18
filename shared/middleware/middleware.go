@@ -14,7 +14,7 @@ import (
 
 func Authentication(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		ct := c.(*context.CustomApplicationContext)
+		ct := c.(*context.ApplicationContext)
 		authorizationHeader := c.Request().Header.Get("Authorization")
 		if authorizationHeader == "" {
 			return ct.ResponseJSON(400, nil, "Token is missing")

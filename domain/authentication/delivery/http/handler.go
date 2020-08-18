@@ -21,7 +21,7 @@ func NewAuthenticationHandler(e *echo.Echo, service authentication.Service) {
 }
 
 func (h authenticationHandler) CreateSession(c echo.Context) error {
-	ct := c.(*context.CustomApplicationContext)
+	ct := c.(*context.ApplicationContext)
 
 	var createSession models.CreateSessionRequest
 	if err := ct.Bind(&createSession); err != nil {

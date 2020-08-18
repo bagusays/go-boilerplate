@@ -21,7 +21,7 @@ func NewProductHandler(e *echo.Echo, service products.Service) {
 }
 
 func (h productsHandler) GetProducts(c echo.Context) error {
-	ct := c.(*context.CustomApplicationContext)
+	ct := c.(*context.ApplicationContext)
 	result := h.productsService.GetProducts()
 	return ct.ResponseJSON(200, result, "")
 }
