@@ -2,8 +2,8 @@ package http
 
 import (
 	"go-boilerplate/domain/products"
-	"go-boilerplate/shared/context"
 	"go-boilerplate/shared/middleware"
+	"go-boilerplate/shared/utils"
 
 	"github.com/labstack/echo"
 )
@@ -21,7 +21,6 @@ func NewProductHandler(e *echo.Echo, service products.Service) {
 }
 
 func (h productsHandler) GetProducts(c echo.Context) error {
-	ct := c.(*context.ApplicationContext)
 	result := h.productsService.GetProducts()
-	return ct.ResponseJSON(200, result, "")
+	return utils.ResponseJSON(c, 200, result, "")
 }

@@ -1,1 +1,7 @@
+.vscode
+
 vendor
+app.config.dev.yml
+app.config.test.yml
+app.config.staging.yml
+app.config.prod.yml

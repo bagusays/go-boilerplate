@@ -2,7 +2,7 @@ package middleware
 
 import (
 	"go-boilerplate/models"
-	"go-boilerplate/shared/context"
+	"go-boilerplate/shared/utils"
 	"net/http"
 	"strings"
 
@@ -13,25 +13,24 @@ import (
 
 func Authentication(next echo.HandlerFunc) echo.HandlerFunc {
 	return func(c echo.Context) error {
-		ct := c.(*context.ApplicationContext)
 		authorizationHeader := c.Request().Header.Get("Authorization")
 		if authorizationHeader == "" {
-			return ct.ResponseJSON(400, nil, "Token is missing")
+			return utils.ResponseJSON(c, 400, nil, "Token is missing")
 		}
 
 		token := strings.Split(authorizationHeader, " ")
 		if len(token) != 2 {
-			return ct.ResponseJSON(400, nil, "Token is missing")
+			return utils.ResponseJSON(c, 400, nil, "Token is missing")
 		}
 
 		res := verifyToken(token[1])
 
 		if res == http.StatusUnauthorized {
-			return ct.ResponseJSON(400, nil, "Unauthorized")
+			return utils.ResponseJSON(c, 400, nil, "Unauthorized")
 		}
 
 		if res == http.StatusBadRequest {
-			return ct.ResponseJSON(400, nil, "Token error")
+			return utils.ResponseJSON(c, 400, nil, "Token error")
 		}
 
 		return next(c)

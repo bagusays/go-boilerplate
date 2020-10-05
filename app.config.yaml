@@ -1,7 +1,0 @@
-db:
-    host: "localhost"
-    username: "root"
-    pass: "toor"
-    dbname: "testingtesting"
-jwt:
-    secretKey: "xxx"

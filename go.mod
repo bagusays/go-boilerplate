@@ -18,7 +18,10 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pressly/goose v2.6.0+incompatible // indirect
 	github.com/spf13/viper v1.7.1
+	github.com/stretchr/objx v0.3.0 // indirect
+	github.com/stretchr/testify v1.6.1
 	github.com/ziutek/mymysql v1.5.4 // indirect
 	google.golang.org/appengine v1.6.6 // indirect
 	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
 )

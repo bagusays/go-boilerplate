@@ -3,7 +3,7 @@ package http
 import (
 	"go-boilerplate/domain/authentication"
 	"go-boilerplate/models"
-	"go-boilerplate/shared/context"
+	"go-boilerplate/shared/utils"
 
 	"github.com/labstack/echo"
 )
@@ -21,21 +21,19 @@ func NewAuthenticationHandler(e *echo.Echo, service authentication.Service) {
 }
 
 func (h authenticationHandler) CreateSession(c echo.Context) error {
-	ct := c.(*context.ApplicationContext)
-
 	var createSession models.CreateSessionRequest
-	if err := ct.Bind(&createSession); err != nil {
-		return ct.ResponseJSON(400, nil, err.Error())
+	if err := c.Bind(&createSession); err != nil {
+		return utils.ResponseJSON(c, 400, nil, err.Error())
 	}
 
-	if err := ct.Validate(&createSession); err != nil {
-		return ct.ResponseJSON(400, nil, err.Error())
+	if err := c.Validate(&createSession); err != nil {
+		return utils.ResponseJSON(c, 400, nil, err.Error())
 	}
 
 	result, err := h.authenticationService.GenerateToken(createSession)
 	if err != nil {
-		return ct.ResponseJSON(400, nil, err.Error())
+		return utils.ResponseJSON(c, 400, nil, err.Error())
 	}
 
-	return ct.ResponseJSON(200, result, "")
+	return utils.ResponseJSON(c, 200, result, "")
 }

@@ -1,6 +1,8 @@
 package main
 
 import (
+	healthCheck "go-boilerplate/domain/health-check/delivery/http"
+
 	productHandler "go-boilerplate/domain/products/delivery/http"
 	productRepository "go-boilerplate/domain/products/repository"
 	productService "go-boilerplate/domain/products/service"
@@ -9,7 +11,7 @@ import (
 	authenticationRepository "go-boilerplate/domain/authentication/repository"
 	authenticationService "go-boilerplate/domain/authentication/service"
 
-	"go-boilerplate/shared/context"
+	"go-boilerplate/shared/config"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
@@ -18,17 +20,14 @@ import (
 func main() {
 	e := echo.New()
 
+	config.LoadConfig()
+
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `{"time":"${time_rfc3339_nano}","method":"${method}","uri":"${uri}","status":${status},` +
 			`"error":"${error}","latency":${latency},"latency_human":"${latency_human}"}` + "\n",
 	}))
 
-	e.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			cc := &context.ApplicationContext{c}
-			return next(cc)
-		}
-	})
+	healthCheck.NewHealthCheckHandler(e)
 
 	productRepo := productRepository.NewProductsRepository()
 	productService := productService.NewProductService(productRepo)
