@@ -12,7 +12,11 @@ import (
 	_ "github.com/golang-migrate/migrate/source/file"
 )
 
-func Migrate() {
+type Migration struct {
+	dbMigrate *migrate.Migrate
+}
+
+func NewMigration() *Migration {
 	connString := database.GetConnectionString()
 	db, err := sql.Open("mysql", fmt.Sprintf("%s&multiStatements=true", connString))
 	if err != nil {
@@ -24,7 +28,7 @@ func Migrate() {
 		fmt.Errorf("Error: %s", err.Error())
 	}
 
-	m, err := migrate.NewWithDatabaseInstance(
+	dbMigrate, err := migrate.NewWithDatabaseInstance(
 		"file://./database/migration",
 		"mysql",
 		driver,
@@ -34,12 +38,21 @@ func Migrate() {
 		fmt.Errorf("Error: %s", err.Error())
 	}
 
-	if err := m.Up(); err != nil && err.Error() != "no change" {
+	return &Migration{
+		dbMigrate: dbMigrate,
+	}
+}
+
+func (m *Migration) Up() {
+	if err := m.dbMigrate.Up(); err != nil && err.Error() != "no change" {
 		log.Fatalf("An error occurred while syncing the database.. %v", err)
 	}
 
-	db.Close()
-	driver.Close()
-	m.Close()
 	fmt.Println("Migrate successfully!")
+}
+
+func (m *Migration) Down() {
+	if err := m.dbMigrate.Down(); err != nil && err.Error() != "no change" {
+		log.Fatalf("An error occurred while syncing the database.. %v", err)
+	}
 }

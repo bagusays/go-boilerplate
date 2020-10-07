@@ -12,7 +12,7 @@ func LoadCMDConfiguration() {
 	flag.Parse()
 
 	if *migrate == true {
-		migration.Migrate()
+		migration.NewMigration().Up()
 		isExit = true
 	}
 
