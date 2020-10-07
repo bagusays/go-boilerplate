@@ -12,22 +12,46 @@ import (
 
 type (
 	ImmutableConfigInterface interface {
-		GetJWTSecretKey() string
 		GetServiceName() string
+		GetJWTSecretKey() string
+		GetDatabaseMySQLHost() string
+		GetDatabaseMySQLUsername() string
+		GetDatabaseMySQLPassword() string
+		GetDatabaseMySQLDBName() string
 	}
 
 	im struct {
-		JWTSecretKey string `mapstructure:"JWT_SECRET_KEY"`
-		ServiceName  string `mapstructure:"SERVICE_NAME"`
+		ServiceName           string `mapstructure:"SERVICE_NAME"`
+		JWTSecretKey          string `mapstructure:"JWT_SECRET_KEY"`
+		DatabaseMySQLHost     string `mapstructure:"DATABASE_MYSQL_HOST"`
+		DatabaseMySQLUsername string `mapstructure:"DATABASE_MYSQL_USERNAME"`
+		DatabaseMySQLPassword string `mapstructure:"DATABASE_MYSQL_PASSWORD"`
+		DatabaseMySQLDBName   string `mapstructure:"DATABASE_MYSQL_DB_NAME"`
 	}
 )
+
+func (i *im) GetServiceName() string {
+	return i.ServiceName
+}
 
 func (i *im) GetJWTSecretKey() string {
 	return i.JWTSecretKey
 }
 
-func (i *im) GetServiceName() string {
-	return i.ServiceName
+func (i *im) GetDatabaseMySQLHost() string {
+	return i.DatabaseMySQLHost
+}
+
+func (i *im) GetDatabaseMySQLUsername() string {
+	return i.DatabaseMySQLUsername
+}
+
+func (i *im) GetDatabaseMySQLPassword() string {
+	return i.DatabaseMySQLPassword
+}
+
+func (i *im) GetDatabaseMySQLDBName() string {
+	return i.DatabaseMySQLDBName
 }
 
 var (
@@ -38,23 +62,24 @@ var (
 func LoadConfig() {
 	imOnce.Do(func() {
 		v := viper.New()
+		var configEnv string
 
 		if flag.Lookup("test.v") != nil {
 			v.SetConfigName("app.config.test")
-			fmt.Println("test")
+			configEnv = "test"
 		} else {
 			appEnv, exists := os.LookupEnv("APP_ENV")
 			if exists {
 				if appEnv == "staging" {
 					v.SetConfigName("app.config.staging")
-					fmt.Println("staging")
+					configEnv = "staging"
 				} else if appEnv == "production" {
 					v.SetConfigName("app.config.prod")
-					fmt.Println("prod")
+					configEnv = "prod"
 				}
 			} else {
 				v.SetConfigName("app.config.dev")
-				fmt.Println("dev")
+				configEnv = "dev"
 			}
 		}
 
@@ -69,6 +94,8 @@ func LoadConfig() {
 		if err != nil {
 			log.Fatalf("unable to decode into struct, %v", err)
 		}
+
+		fmt.Println(fmt.Sprintf("[CONFIG ENVIRONMENT] %s", configEnv))
 	})
 }
 

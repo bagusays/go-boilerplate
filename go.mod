@@ -3,25 +3,26 @@ module go-boilerplate
 go 1.15
 
 require (
+	github.com/Microsoft/go-winio v0.4.14 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
-	github.com/go-playground/universal-translator v0.17.0 // indirect
-	github.com/go-playground/validator v9.31.0+incompatible // indirect
-	github.com/go-playground/validator/v10 v10.3.0
-	github.com/go-sql-driver/mysql v1.5.0 // indirect
-	github.com/jmoiron/sqlx v1.2.0 // indirect
-	github.com/julienschmidt/httprouter v1.2.0 // indirect
+	github.com/docker/distribution v2.7.1+incompatible // indirect
+	github.com/docker/docker v1.13.1 // indirect
+	github.com/docker/go-connections v0.4.0 // indirect
+	github.com/docker/go-units v0.4.0 // indirect
+	github.com/go-sql-driver/mysql v1.5.0
+	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/labstack/echo v3.3.10+incompatible
-	github.com/labstack/echo/v4 v4.1.16 // indirect
-	github.com/leodido/go-urn v1.2.0 // indirect
-	github.com/lib/pq v1.8.0 // indirect
-	github.com/mattn/go-sqlite3 v1.14.0 // indirect
+	github.com/labstack/gommon v0.3.0 // indirect
+	github.com/mattn/go-colorable v0.1.6 // indirect
+	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/pressly/goose v2.6.0+incompatible // indirect
+	github.com/sirupsen/logrus v1.4.1
 	github.com/spf13/viper v1.7.1
-	github.com/stretchr/objx v0.3.0 // indirect
 	github.com/stretchr/testify v1.6.1
-	github.com/ziutek/mymysql v1.5.4 // indirect
-	google.golang.org/appengine v1.6.6 // indirect
-	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
+	github.com/valyala/fasttemplate v1.1.0 // indirect
+	golang.org/x/crypto v0.0.0-20200221231518-2aa609cf4a9d // indirect
+	golang.org/x/net v0.0.0-20200324143707-d3edc9973b7e // indirect
 	gopkg.in/yaml.v3 v3.0.0-20200615113413-eeeca48fe776 // indirect
+	gorm.io/driver/mysql v1.0.2
+	gorm.io/gorm v1.20.2
 )

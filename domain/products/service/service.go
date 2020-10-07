@@ -2,6 +2,7 @@ package service
 
 import (
 	"go-boilerplate/domain/products"
+	"go-boilerplate/models"
 )
 
 type serviceHandler struct {
@@ -14,6 +15,10 @@ func NewProductService(productRepo products.Repository) products.Service {
 	}
 }
 
-func (s serviceHandler) GetProducts() interface{} {
-	return s.productRepo.GetProducts()
+func (s serviceHandler) GetProducts() (*models.Products, error) {
+	product, err := s.productRepo.GetProducts()
+	if err != nil {
+		return nil, err
+	}
+	return product, nil
 }

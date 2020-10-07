@@ -1,0 +1,1 @@
+INSERT INTO products(name) VALUES ('IF-2291');

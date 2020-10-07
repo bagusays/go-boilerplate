@@ -1,6 +1,8 @@
 package main
 
 import (
+	"fmt"
+	"go-boilerplate/cmd"
 	healthCheck "go-boilerplate/domain/health-check/delivery/http"
 
 	productHandler "go-boilerplate/domain/products/delivery/http"
@@ -12,15 +14,25 @@ import (
 	authenticationService "go-boilerplate/domain/authentication/service"
 
 	"go-boilerplate/shared/config"
+	"go-boilerplate/shared/database"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
+	config.LoadConfig()
+	cmd.LoadCMDConfiguration()
+
 	e := echo.New()
 
-	config.LoadConfig()
+	mysqlConn, err := database.OpenMysqlConn()
+	if err != nil {
+		msgError := fmt.Sprintf("Failed to open mysql connection: %s", err.Error())
+		log.Errorf(msgError)
+		panic(msgError)
+	}
 
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
 		Format: `{"time":"${time_rfc3339_nano}","method":"${method}","uri":"${uri}","status":${status},` +
@@ -29,7 +41,7 @@ func main() {
 
 	healthCheck.NewHealthCheckHandler(e)
 
-	productRepo := productRepository.NewProductsRepository()
+	productRepo := productRepository.NewProductsRepository(mysqlConn)
 	productService := productService.NewProductService(productRepo)
 	productHandler.NewProductHandler(e, productService)
 

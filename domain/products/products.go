@@ -1,9 +1,11 @@
 package products
 
+import "go-boilerplate/models"
+
 type Service interface {
-	GetProducts() interface{}
+	GetProducts() (*models.Products, error)
 }
 
 type Repository interface {
-	GetProducts() interface{}
+	GetProducts() (*models.Products, error)
 }
