@@ -15,10 +15,10 @@ import (
 
 	"go-boilerplate/shared/config"
 	"go-boilerplate/shared/database"
+	"go-boilerplate/shared/log"
 
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
-	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -35,8 +35,7 @@ func main() {
 	}
 
 	e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
-		Format: `{"time":"${time_rfc3339_nano}","method":"${method}","uri":"${uri}","status":${status},` +
-			`"error":"${error}","latency":${latency},"latency_human":"${latency_human}"}` + "\n",
+		Format: "time=${time_rfc3339}, method=${method}, uri=${uri}, latency=${latency}, latency_human=${latency_human}, status=${status}\n",
 	}))
 
 	healthCheck.NewHealthCheckHandler(e)

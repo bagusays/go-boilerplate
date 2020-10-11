@@ -11,7 +11,7 @@ type repoHandler struct {
 	mysqlConn *gorm.DB
 }
 
-// NewVoucherRepository ....
+// NewProductsRepository ....
 func NewProductsRepository(mysqlConn *gorm.DB) products.Repository {
 	return &repoHandler{
 		mysqlConn: mysqlConn,

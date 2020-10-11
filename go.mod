@@ -12,7 +12,7 @@ require (
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang-migrate/migrate v3.5.4+incompatible
 	github.com/labstack/echo v3.3.10+incompatible
-	github.com/labstack/gommon v0.3.0
+	github.com/labstack/gommon v0.3.0 // indirect
 	github.com/mattn/go-colorable v0.1.6 // indirect
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
