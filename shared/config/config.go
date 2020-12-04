@@ -3,102 +3,55 @@ package config
 import (
 	"flag"
 	"fmt"
-	"log"
 	"os"
-	"sync"
+	"strings"
 
 	"github.com/spf13/viper"
 )
 
-type (
-	ImmutableConfigInterface interface {
-		GetServiceName() string
-		GetJWTSecretKey() string
-		GetDatabaseMySQLHost() string
-		GetDatabaseMySQLUsername() string
-		GetDatabaseMySQLPassword() string
-		GetDatabaseMySQLDBName() string
+type Config struct {
+	Apps     Apps     `json:"apps"`
+	Database Database `json:"database"`
+	Log      Log      `json:"log"`
+}
+
+type Log struct {
+	IsWriteToFile bool `json:"isWriteToFile"`
+}
+
+type Apps struct {
+	Name string `json:"name"`
+	Port string `json:"port"`
+}
+
+type Database struct {
+	Host     string `json:"host"`
+	Port     int    `json:"port"`
+	Database string `json:"database"`
+	Username string `json:"username"`
+	Password string `json:"password"`
+}
+
+func New(configPath string) *Config {
+	env := "dev"
+	if v, ok := os.LookupEnv("ENV"); ok {
+		env = v
+	} else if strings.HasSuffix(os.Args[0], ".test") || flag.Lookup("test.v") != nil {
+		env = "test"
 	}
 
-	im struct {
-		ServiceName           string `mapstructure:"SERVICE_NAME"`
-		JWTSecretKey          string `mapstructure:"JWT_SECRET_KEY"`
-		DatabaseMySQLHost     string `mapstructure:"DATABASE_MYSQL_HOST"`
-		DatabaseMySQLUsername string `mapstructure:"DATABASE_MYSQL_USERNAME"`
-		DatabaseMySQLPassword string `mapstructure:"DATABASE_MYSQL_PASSWORD"`
-		DatabaseMySQLDBName   string `mapstructure:"DATABASE_MYSQL_DB_NAME"`
+	path := fmt.Sprintf("%sconfig.%s.json", configPath, env)
+	fmt.Println("Loading config", path)
+
+	viper.SetConfigFile(path)
+	viper.SetConfigType("json")
+	if err := viper.ReadInConfig(); err != nil {
+		panic(err)
 	}
-)
 
-func (i *im) GetServiceName() string {
-	return i.ServiceName
-}
-
-func (i *im) GetJWTSecretKey() string {
-	return i.JWTSecretKey
-}
-
-func (i *im) GetDatabaseMySQLHost() string {
-	return i.DatabaseMySQLHost
-}
-
-func (i *im) GetDatabaseMySQLUsername() string {
-	return i.DatabaseMySQLUsername
-}
-
-func (i *im) GetDatabaseMySQLPassword() string {
-	return i.DatabaseMySQLPassword
-}
-
-func (i *im) GetDatabaseMySQLDBName() string {
-	return i.DatabaseMySQLDBName
-}
-
-var (
-	imOnce sync.Once
-	config im
-)
-
-func LoadConfig() {
-	imOnce.Do(func() {
-		v := viper.New()
-		var configEnv string
-
-		if flag.Lookup("test.v") != nil {
-			v.SetConfigName("app.config.test")
-			configEnv = "test"
-		} else {
-			appEnv, exists := os.LookupEnv("APP_ENV")
-			if exists {
-				if appEnv == "staging" {
-					v.SetConfigName("app.config.staging")
-					configEnv = "staging"
-				} else if appEnv == "production" {
-					v.SetConfigName("app.config.prod")
-					configEnv = "prod"
-				}
-			} else {
-				v.SetConfigName("app.config.dev")
-				configEnv = "dev"
-			}
-		}
-
-		v.AddConfigPath(".") // optionally look for config in the working directory
-		v.AutomaticEnv()
-
-		if err := v.ReadInConfig(); err != nil {
-			log.Fatalf("[CONFIG][missing] Failed to read app.config.* file. %v", err)
-		}
-
-		err := v.Unmarshal(&config)
-		if err != nil {
-			log.Fatalf("unable to decode into struct, %v", err)
-		}
-
-		fmt.Println(fmt.Sprintf("[CONFIG ENVIRONMENT] %s", configEnv))
-	})
-}
-
-func GetConfig() ImmutableConfigInterface {
-	return &config
+	cfg := &Config{}
+	if err := viper.Unmarshal(cfg); err != nil {
+		panic(err)
+	}
+	return cfg
 }

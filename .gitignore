@@ -1,7 +1,5 @@
 .vscode
-
+.idea
+logs
 vendor
-app.config.dev.yml
-app.config.test.yml
-app.config.staging.yml
-app.config.prod.yml
+configs/app.config.prod.yml

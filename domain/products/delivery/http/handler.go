@@ -2,9 +2,12 @@ package http
 
 import (
 	"go-boilerplate/domain/products"
+	"go-boilerplate/shared/constants"
+	"go-boilerplate/shared/errors"
 	"go-boilerplate/shared/utils"
+	"net/http"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
 type productsHandler struct {
@@ -24,7 +27,7 @@ func NewProductHandler(e *echo.Echo, service products.Service) productsHandler {
 func (h productsHandler) GetProducts(c echo.Context) error {
 	result, err := h.productsService.GetProducts()
 	if err != nil {
-		return utils.ResponseJSON(c, 500, nil, err.Error())
+		return utils.ResponseJSON(c, http.StatusInternalServerError, errors.MapErrToStatusCode(err), nil, err.Error())
 	}
-	return utils.ResponseJSON(c, 200, result, "")
+	return utils.ResponseJSON(c, constants.StatusSuccess, 200, result, "")
 }

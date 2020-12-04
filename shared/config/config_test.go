@@ -2,18 +2,14 @@ package config_test
 
 import (
 	"go-boilerplate/shared/config"
-	"os"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
-func init() {
-	os.Chdir("../../")
-}
-
 func TestConfig(t *testing.T) {
-	config.LoadConfig()
-	conf := config.GetConfig()
-	if conf.GetJWTSecretKey() == "" {
-		t.Error("JWT is empty")
-	}
+	res := config.New("../../configs/")
+
+	assert.Greater(t, len(res.Apps.Name), 1)
+	assert.NotEqual(t, "", res.Apps.Port)
 }

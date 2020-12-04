@@ -1,15 +1,14 @@
 package http
 
 import (
-	"fmt"
-	"go-boilerplate/shared/config"
+	"go-boilerplate/shared/constants"
 	"go-boilerplate/shared/utils"
+	"net/http"
 
-	"github.com/labstack/echo"
+	"github.com/labstack/echo/v4"
 )
 
-type healthCheckHandler struct {
-}
+type healthCheckHandler struct{}
 
 func NewHealthCheckHandler(e *echo.Echo) healthCheckHandler {
 	handler := healthCheckHandler{}
@@ -20,8 +19,5 @@ func NewHealthCheckHandler(e *echo.Echo) healthCheckHandler {
 }
 
 func (h healthCheckHandler) HealthCheckHandler(c echo.Context) error {
-	fmt.Println(config.GetConfig().GetJWTSecretKey())
-	fmt.Println(config.GetConfig().GetServiceName())
-
-	return utils.ResponseJSON(c, 200, "ok", "")
+	return utils.ResponseJSON(c, http.StatusOK, constants.StatusSuccess, "ok", "")
 }

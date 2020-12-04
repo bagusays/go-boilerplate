@@ -1,13 +1,16 @@
-package main
+package cmd_test
 
 import (
 	"fmt"
 	"go-boilerplate/cmd"
 	"go-boilerplate/shared/config"
+	"os"
+	"syscall"
+	"testing"
 )
 
-func main() {
-	cfg := config.New("./configs/")
+func TestHttpServer(t *testing.T) {
+	cfg := config.New("../configs/")
 
 	isReady := make(chan bool)
 	isShutdown := make(chan bool)
@@ -18,6 +21,10 @@ func main() {
 	})
 	go server.StartServer()
 	<-isReady
+
+	p, _ := os.FindProcess(syscall.Getpid())
+	p.Signal(syscall.SIGINT)
+
 	<-isShutdown
 
 	fmt.Println("Service stopped")
