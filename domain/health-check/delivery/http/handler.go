@@ -10,12 +10,12 @@ import (
 
 type healthCheckHandler struct{}
 
-func NewHealthCheckHandler(e *echo.Echo) healthCheckHandler {
+func NewHealthCheckHandler(e *echo.Echo) *healthCheckHandler {
 	handler := healthCheckHandler{}
 
 	e.GET("/health-check", handler.HealthCheckHandler)
 
-	return handler
+	return &handler
 }
 
 func (h healthCheckHandler) HealthCheckHandler(c echo.Context) error {

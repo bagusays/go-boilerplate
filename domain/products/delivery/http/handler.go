@@ -14,14 +14,14 @@ type productsHandler struct {
 	productsService products.Service
 }
 
-func NewProductHandler(e *echo.Echo, service products.Service) productsHandler {
+func NewProductHandler(e *echo.Echo, service products.Service) *productsHandler {
 	handler := productsHandler{
 		productsService: service,
 	}
 
 	e.GET("/", handler.GetProducts)
 
-	return handler
+	return &handler
 }
 
 func (h productsHandler) GetProducts(c echo.Context) error {
